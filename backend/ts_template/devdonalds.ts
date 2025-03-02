@@ -45,21 +45,49 @@ app.post("/parse", (req:Request, res:Response) => {
 // [TASK 1] ====================================================================
 // Takes in a recipeName and returns it in a form that 
 const parse_handwriting = (recipeName: string): string | null => {
-  // TODO: implement me
-  return recipeName
+  // TODO: implement me\
+  recipeName = recipeName.replace(/[-_]+/g, ' '); // this is where 2041 came in handy hehe
+  recipeName = recipeName.replace(/[^A-Za-z\s]/g, '');
+  recipeName = recipeName.replace(/\s+/g, ' ').trim();
+
+  let result = '';
+  let inWord = false;
+
+  for (let i = 0; i < recipeName.length; i++) {
+      const char = recipeName[i];    
+      if (char === ' ') {
+          result += ' ';
+          inWord = false;
+      } else {
+          if (!inWord) {
+            result += char.toUpperCase();
+            inWord = true;
+          } else {
+            result += char.toLowerCase();
+          }
+      }
+    }
+
+  recipeName = result; 
+
+  // returning time
+  return recipeName.length > 0 ? recipeName : null;
 }
 
 // [TASK 2] ====================================================================
 // Endpoint that adds a CookbookEntry to your magical cookbook
+
 app.post("/entry", (req:Request, res:Response) => {
   // TODO: implement me
+  
   res.status(500).send("not yet implemented!")
 
 });
 
+
 // [TASK 3] ====================================================================
 // Endpoint that returns a summary of a recipe that corresponds to a query name
-app.get("/summary", (req:Request, res:Request) => {
+app.get("/summary", (req:Request, res:Response) => {
   // TODO: implement me
   res.status(500).send("not yet implemented!")
 
